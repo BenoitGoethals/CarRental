@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+
+import "google/protobuf/timestamp.proto";
+option csharp_namespace = "GrpcServiceClient.Protos";
+
+
+
+package clientrental;
+
+// The greeting service definition.
+service Clients {
+	// Sends a greeting
+	rpc GetClientById (ClientRequestID) returns (ClientReply);
+	rpc GetClientByName (ClientRequestName) returns (ClientReply);
+}
+
+// The request message containing the user's name.
+message ClientRequestID {
+	string id = 1;
+}
+
+message ClientRequestName {
+	string idCard = 1;
+}
+
+// The response message containing the greetings.
+message ClientReply {
+	string name = 1;
+	string forName=2;
+	string street=3;
+	string nbr=4;
+	string zip=5;
+	string city=6;
+	string country=7;
+	string email=8;
+	string tel=9;
+	string idCarNbr=10;
+	google.protobuf.Timestamp birthDate=11;
+	string drivinglicence=12;
+	string iD=13;
+}
+
