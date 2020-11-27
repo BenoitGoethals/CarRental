@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-
+import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 option csharp_namespace = "GrpcServiceClient.Protos";
 
@@ -11,21 +11,24 @@ package clientrental;
 // The greeting service definition.
 service Clients {
 	// Sends a greeting
-	rpc GetClientById (ClientRequestID) returns (ClientReply);
-	rpc GetClientByName (ClientRequestName) returns (ClientReply);
+	rpc GetClientById (ClientRequestID) returns (ClientDTO);
+	rpc GetClientByName (ClientRequestName) returns (ClientDTO);
+	rpc GetAllClient (google.protobuf.Empty) returns (stream ClientDTO);
+
+	rpc AddClient (ClientDTO) returns (google.protobuf.Empty);
 }
 
 // The request message containing the user's name.
 message ClientRequestID {
-	string id = 1;
+	int32 id = 1;
 }
 
 message ClientRequestName {
-	string idCard = 1;
+	string name = 1;
 }
 
 // The response message containing the greetings.
-message ClientReply {
+message ClientDTO {
 	string name = 1;
 	string forName=2;
 	string street=3;
@@ -38,6 +41,9 @@ message ClientReply {
 	string idCarNbr=10;
 	google.protobuf.Timestamp birthDate=11;
 	string drivinglicence=12;
-	string iD=13;
+	int32 iD=13;
+	
 }
+
+
 

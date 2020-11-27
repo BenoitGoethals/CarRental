@@ -1,0 +1,42 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "GrpcServiceCar.Protos";
+
+service Cars {
+	
+	rpc GetCaryId (CarRequestID) returns (CarDTO);
+	rpc GetCarByplate (CarRequestPlate) returns (CarDTO);
+	rpc GetAllCar (google.protobuf.Empty) returns (stream CarDTO);
+
+	rpc AddCar(CarDTO) returns (google.protobuf.Empty);
+}
+
+message CarRequestID {
+	int32 id = 1;
+}
+
+message CarRequestPlate {
+	string name = 1;
+}
+
+message CarDTO {
+	string PlateNbr = 1;
+	int32 Km=2;
+	bool Operational=3;
+	google.protobuf.Timestamp LastMaintenace=4;
+	google.protobuf.Timestamp NextMaintenace=5;
+	google.protobuf.Timestamp InCirculationDate=6;	
+	
+	int32 Id=7;
+	enum TyepeOfCar {
+		UNKNOWN = 0;
+		Coupe = 1;
+		Sedan = 2;
+		MiniVan = 3;
+	}
+	TyepeOfCar typeCar = 8;
+	string remarks=9;
+}

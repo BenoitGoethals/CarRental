@@ -5,13 +5,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Protos\Car.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="9.3.0" />
     <PackageReference Include="Grpc.AspNetCore" Version="2.33.1" />
     <PackageReference Include="Grpc.Net.Client" Version="2.33.1" />
     <PackageReference Include="Grpc.Net.Common" Version="2.33.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
     <PackageReference Include="protobuf" Version="2.6.1.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <Protobuf Include="Protos\Car.proto" />
     <Protobuf Include="Protos\Client.proto">
       <GrpcServices>Both</GrpcServices>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
