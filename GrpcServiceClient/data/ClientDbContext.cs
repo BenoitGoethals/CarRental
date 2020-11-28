@@ -25,7 +25,7 @@ namespace GrpcServiceClient.data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            //modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             //for (int i = 0; i < 20; i++)
             //{
             //    modelBuilder.Entity<Client>().HasData(new Client() { Id=-i,BirthDate = DateTime.Now, City = "Gent"+i, Country = "Belgie", DrivingLicence = "dsfdsf"+i, Email = "dfdsfd@dfds.be", ForName = "ben", IdCarNbr = "dsfds"+i, Name = "goet", Tel = "04785981552", Zip = "9200" });

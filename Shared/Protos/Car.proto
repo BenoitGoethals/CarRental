@@ -7,6 +7,10 @@ option csharp_namespace = "GrpcServiceCar.Protos";
 
 service Cars {
 	
+	rpc GetCarTimeSLotsById (CarRequestID) returns (TimeSLotCollection);
+	rpc GetCarByplateTimeslotsByName (CarRequestPlate) returns (TimeSLotCollection);
+	rpc addTimeSlot(TimeSlotCarId) returns(CarDTO);
+	rpc addTimeSlotByName(TimeSlotCarName) returns(CarDTO);
 	rpc GetCaryId (CarRequestID) returns (CarDTO);
 	rpc GetCarByplate (CarRequestPlate) returns (CarDTO);
 	rpc GetAllCar (google.protobuf.Empty) returns (stream CarDTO);
@@ -16,6 +20,17 @@ service Cars {
 
 message CarRequestID {
 	int32 id = 1;
+}
+
+
+message TimeSlotCarId {
+	int32 idCar = 1;
+	TimeSLot timeslot=2;
+}
+
+message TimeSlotCarName {
+	int32 idName = 1;
+	TimeSLot timeslot=2;
 }
 
 message CarRequestPlate {
@@ -39,4 +54,15 @@ message CarDTO {
 	}
 	TyepeOfCar typeCar = 8;
 	string remarks=9;
+	repeated TimeSLot TimeSLots=10;
+}
+
+message TimeSLot {
+	int32 Id=1;
+	google.protobuf.Timestamp StartSLot=2;
+	google.protobuf.Timestamp EndSlot=3;
+}
+
+message TimeSLotCollection {
+	repeated TimeSLot TimeSLots=1;
 }

@@ -80,6 +80,18 @@ namespace Starter
             var response3 = await clcar.GetCarByplateAsync(new CarRequestPlate(){Name="fsdfdsfdsf"});
 
             Console.WriteLine("By PlateNbr: " + response3.PlateNbr);
+
+
+            var response4 = await clcar.addTimeSlotAsync(new TimeSlotCarId()
+            {
+                IdCar = response3.Id,
+                Timeslot = new TimeSLot()
+                    {StartSLot = ConverterTime.UtcConverter(DateTime.Now), EndSlot = ConverterTime.UtcConverter(DateTime.Now.AddDays(1))}
+            });
+
+            Console.WriteLine("By PlateNbr: " + response4);
+
+
             Console.ReadLine();
         }
     }

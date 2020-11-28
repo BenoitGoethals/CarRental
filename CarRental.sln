@@ -3,17 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcServiceCar", "GrpcServiceCar\GrpcServiceCar.csproj", "{2B60E568-88D4-4A70-8D65-BC184AFA123A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrpcServiceCar", "GrpcServiceCar\GrpcServiceCar.csproj", "{2B60E568-88D4-4A70-8D65-BC184AFA123A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcServiceClient", "GrpcServiceClient\GrpcServiceClient.csproj", "{2DE10A56-4A1A-448D-BB3A-E9E5ABBC77CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrpcServiceClient", "GrpcServiceClient\GrpcServiceClient.csproj", "{2DE10A56-4A1A-448D-BB3A-E9E5ABBC77CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcServiceRental", "GrpcServiceRental\GrpcServiceRental.csproj", "{E9F8C759-F186-4D40-A80A-E3349FE2369E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrpcServiceRental", "GrpcServiceRental\GrpcServiceRental.csproj", "{E9F8C759-F186-4D40-A80A-E3349FE2369E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcServiceReservations", "GrpcServiceReservations\GrpcServiceReservations.csproj", "{67D7A5DF-936E-4BDA-BB9D-EB8EB0BBBC54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrpcServiceReservations", "GrpcServiceReservations\GrpcServiceReservations.csproj", "{67D7A5DF-936E-4BDA-BB9D-EB8EB0BBBC54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starter", "Starter\Starter.csproj", "{681F0A40-6E54-4C15-93B8-9026B0320E4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starter", "Starter\Starter.csproj", "{681F0A40-6E54-4C15-93B8-9026B0320E4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{F06835F8-F28F-4ADF-9264-7E849C5BF747}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{F06835F8-F28F-4ADF-9264-7E849C5BF747}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentalBusLogic", "RentalBusLogic\RentalBusLogic.csproj", "{826D5098-2F76-4502-A490-0FE62BBCA6D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentalBusLogicTests", "RentalBusLogicTests\RentalBusLogicTests.csproj", "{99A1F69F-F055-44D9-A931-2A218EFA7386}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,14 @@ Global
 		{F06835F8-F28F-4ADF-9264-7E849C5BF747}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F06835F8-F28F-4ADF-9264-7E849C5BF747}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F06835F8-F28F-4ADF-9264-7E849C5BF747}.Release|Any CPU.Build.0 = Release|Any CPU
+		{826D5098-2F76-4502-A490-0FE62BBCA6D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{826D5098-2F76-4502-A490-0FE62BBCA6D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{826D5098-2F76-4502-A490-0FE62BBCA6D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{826D5098-2F76-4502-A490-0FE62BBCA6D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99A1F69F-F055-44D9-A931-2A218EFA7386}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99A1F69F-F055-44D9-A931-2A218EFA7386}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99A1F69F-F055-44D9-A931-2A218EFA7386}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99A1F69F-F055-44D9-A931-2A218EFA7386}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

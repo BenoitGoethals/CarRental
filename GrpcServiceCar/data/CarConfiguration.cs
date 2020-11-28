@@ -23,7 +23,7 @@ namespace GrpcServiceCar.data
             builder.Property(s => s.PlateNbr).HasColumnName(nameof(Car.PlateNbr)).IsRequired();
             builder.Property(s => s.Remarks).HasColumnName(nameof(Car.Remarks)).IsRequired();
             builder.Property(s => s.Type).HasColumnName(nameof(Car.Type)).IsRequired();
-
+            
 
         }
     }

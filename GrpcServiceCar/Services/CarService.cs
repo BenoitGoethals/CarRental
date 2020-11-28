@@ -66,9 +66,9 @@ namespace GrpcServiceCar.Services
                     Operational = c.Operational,
                     PlateNbr = c.PlateNbr,
                     Remarks = c.Remarks,
-                    TypeCar = (CarDTO.Types.TyepeOfCar) c.Type
+                    TypeCar = (CarDTO.Types.TyepeOfCar)c.Type
                 };
-            
+
                 return cl;
             }
             return new CarDTO(); ;
@@ -93,7 +93,7 @@ namespace GrpcServiceCar.Services
             });
         }
 
-        public override Task<Empty> AddCar(CarDTO request, ServerCallContext context)
+        public override async Task<Empty> AddCar(CarDTO request, ServerCallContext context)
         {
             Car car = new Car()
             {
@@ -107,32 +107,34 @@ namespace GrpcServiceCar.Services
                 Remarks = request.Remarks,
                 Type = (TypeCar)request.TypeCar
 
+
+
             };
             CarValidator validationRules = new CarValidator();
-            if (validationRules.Validate(car).IsValid)
+            if ((await validationRules.ValidateAsync(car)).IsValid)
             {
-                using var transaction = CarDbContext.Database.BeginTransaction();
+                await using var transaction = await CarDbContext.Database.BeginTransactionAsync();
                 {
                     try
                     {
                         var data = CarDbContext.Cars.FirstOrDefault(i => i.Id.Equals(request.Id));
                         if (data != null)
                         {
-                            CarDbContext.Cars.Update(car);
+                            CarDbContext.Cars.Update(data);
 
                         }
                         else
                         {
-                            CarDbContext.Cars.Add(car);
+                            await CarDbContext.Cars.AddAsync(car);
                         }
 
-                        CarDbContext.SaveChanges();
-                        transaction.Commit();
+                        await CarDbContext.SaveChangesAsync();
+                        await transaction.CommitAsync();
                     }
                     catch (Exception e)
                     {
                         _logger.LogError(e.StackTrace);
-                        transaction.Rollback();
+                        await transaction.RollbackAsync();
                         throw new RpcException(new Status(StatusCode.Cancelled, e.Message));
 
                     }
@@ -146,7 +148,95 @@ namespace GrpcServiceCar.Services
 
 
 
-            return Task.FromResult(new Empty());
+            return await Task.FromResult(new Empty());
+        }
+
+        public override async Task<CarDTO> addTimeSlot(TimeSlotCarId request, ServerCallContext context)
+        {
+            await using var transaction = await CarDbContext.Database.BeginTransactionAsync();
+            {
+                try
+                {
+                    var data = CarDbContext.Cars.FirstOrDefault(i => i.Id.Equals(request.IdCar));
+
+                    if (data != null)
+                    {
+                        TimeSlot timeSlot = new TimeSlot() { EndSlot = request.Timeslot.EndSlot.ToDateTime(), StartSlot = request.Timeslot.StartSLot.ToDateTime(), Car = data };
+                        data.TimeSlots.Add(timeSlot);
+                        CarDbContext.Cars.Update(data);
+                        await CarDbContext.SaveChangesAsync();
+                        await transaction.CommitAsync();
+                        return new CarDTO()
+                        {
+                            Id = data.Id,
+                            InCirculationDate = ConverterTime.UtcConverter(data.InCirculationDate),
+                            LastMaintenace = ConverterTime.UtcConverter(data.LastMaintenace),
+                            Km = data.Km,
+                            NextMaintenace = ConverterTime.UtcConverter(data.NextMaintenace),
+                            Operational = data.Operational,
+                            PlateNbr = data.PlateNbr,
+                            Remarks = data.Remarks,
+                            TypeCar = (CarDTO.Types.TyepeOfCar)data.Type
+                        };
+                    }
+
+                    return null;
+
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e.StackTrace);
+                    await transaction.RollbackAsync();
+                    throw new RpcException(new Status(StatusCode.Cancelled, e.Message));
+
+                }
+            }
+
+
+
+        }
+
+        public override async Task<CarDTO> addTimeSlotByName(TimeSlotCarName request, ServerCallContext context)
+        {
+            await using var transaction = await CarDbContext.Database.BeginTransactionAsync();
+            {
+                try
+                {
+                    var data = CarDbContext.Cars.FirstOrDefault(i => i.Id.Equals(request.IdName));
+
+                    if (data != null)
+                    {
+                        TimeSlot timeSlot = new TimeSlot() { EndSlot = request.Timeslot.EndSlot.ToDateTime(), StartSlot = request.Timeslot.StartSLot.ToDateTime(), Car = data };
+                        data.TimeSlots.Add(timeSlot);
+                        CarDbContext.Cars.Update(data);
+                        await CarDbContext.SaveChangesAsync();
+                        await transaction.CommitAsync();
+                        return new CarDTO()
+                        {
+                            Id = data.Id,
+                            InCirculationDate = ConverterTime.UtcConverter(data.InCirculationDate),
+                            LastMaintenace = ConverterTime.UtcConverter(data.LastMaintenace),
+                            Km = data.Km,
+                            NextMaintenace = ConverterTime.UtcConverter(data.NextMaintenace),
+                            Operational = data.Operational,
+                            PlateNbr = data.PlateNbr,
+                            Remarks = data.Remarks,
+                            TypeCar = (CarDTO.Types.TyepeOfCar)data.Type
+                        };
+                    }
+
+                    return null;
+
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e.StackTrace);
+                    await transaction.RollbackAsync();
+                    throw new RpcException(new Status(StatusCode.Cancelled, e.Message));
+
+                }
+            }
+
         }
     }
 }
