@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Google.Protobuf.Collections;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using GrpcServiceCar.data;
 using GrpcServiceCar.Protos;
 using GrpcServiceClient.Protos;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Shared.helpers;
 using Shared.model;
@@ -17,80 +19,107 @@ namespace GrpcServiceCar.Services
 {
     public class CarService : Cars.CarsBase
     {
-        private CarDbContext CarDbContext;
+        private readonly CarDbContext _carDbContext;
         private readonly ILogger<CarService> _logger;
         public CarService(ILogger<CarService> logger, CarDbContext carDbContext)
         {
-            CarDbContext = carDbContext;
+            _carDbContext = carDbContext;
             _logger = logger;
         }
 
         public override async Task<CarDTO> GetCarByplate(CarRequestPlate request, ServerCallContext context)
         {
-            Car c = await CarDbContext.Cars.FirstOrDefaultAsync(t => t.PlateNbr.Equals(request.Name));
-            if (c != null)
+            try
             {
-
-                var cl = new CarDTO()
+                var c = await _carDbContext.Cars.FirstOrDefaultAsync(t => t.PlateNbr.Equals(request.Name));
+                if (c != null)
                 {
-                    Id = c.Id,
-                    InCirculationDate = ConverterTime.UtcConverter(c.InCirculationDate),
-                    LastMaintenace = ConverterTime.UtcConverter(c.LastMaintenace),
-                    Km = c.Km,
-                    NextMaintenace = ConverterTime.UtcConverter(c.NextMaintenace),
-                    Operational = c.Operational,
-                    PlateNbr = c.PlateNbr,
-                    Remarks = c.Remarks,
-                    TypeCar = (CarDTO.Types.TyepeOfCar)c.Type
-                };
 
-                return cl;
+                    var cl = new CarDTO()
+                    {
+                        Id = c.Id,
+                        InCirculationDate = ConverterTime.UtcConverter(c.InCirculationDate),
+                        LastMaintenace = ConverterTime.UtcConverter(c.LastMaintenace),
+                        Km = c.Km,
+                        NextMaintenace = ConverterTime.UtcConverter(c.NextMaintenace),
+                        Operational = c.Operational,
+                        PlateNbr = c.PlateNbr,
+                        Remarks = c.Remarks,
+                        TypeCar = (CarDTO.Types.TyepeOfCar)c.Type
+                    };
+
+                    return cl;
+                }
+                return new CarDTO();
             }
-            return new CarDTO();
+            catch (Exception e)
+            {
+                _logger.LogError(e.StackTrace);
+                return new CarDTO();
+            }
+
         }
 
 
         public override async Task<CarDTO> GetCaryId(CarRequestID request, ServerCallContext context)
         {
-            Car c = await CarDbContext.Cars.FirstOrDefaultAsync(t => t.Id.Equals(request.Id));
-            if (c != null)
+            try
             {
-
-                var cl = new CarDTO()
+                var c = await _carDbContext.Cars.FirstOrDefaultAsync(t => t.Id.Equals(request.Id));
+                if (c != null)
                 {
-                    Id = c.Id,
-                    InCirculationDate = ConverterTime.UtcConverter(c.InCirculationDate),
-                    LastMaintenace = ConverterTime.UtcConverter(c.LastMaintenace),
-                    Km = c.Km,
-                    NextMaintenace = ConverterTime.UtcConverter(c.NextMaintenace),
-                    Operational = c.Operational,
-                    PlateNbr = c.PlateNbr,
-                    Remarks = c.Remarks,
-                    TypeCar = (CarDTO.Types.TyepeOfCar)c.Type
-                };
 
-                return cl;
+                    var cl = new CarDTO()
+                    {
+                        Id = c.Id,
+                        InCirculationDate = ConverterTime.UtcConverter(c.InCirculationDate),
+                        LastMaintenace = ConverterTime.UtcConverter(c.LastMaintenace),
+                        Km = c.Km,
+                        NextMaintenace = ConverterTime.UtcConverter(c.NextMaintenace),
+                        Operational = c.Operational,
+                        PlateNbr = c.PlateNbr,
+                        Remarks = c.Remarks,
+                        TypeCar = (CarDTO.Types.TyepeOfCar)c.Type
+                    };
+
+                    return cl;
+                }
+                return new CarDTO(); ;
             }
-            return new CarDTO(); ;
+            catch (Exception e)
+            {
+                _logger.LogError(e.StackTrace);
+                return new CarDTO();
+            }
+
+
         }
 
         public override async Task GetAllCar(Empty request, IServerStreamWriter<CarDTO> responseStream, ServerCallContext context)
         {
-            await CarDbContext.Cars.ForEachAsync(c =>
+            try
             {
-                responseStream.WriteAsync(new CarDTO()
+                await _carDbContext.Cars.ForEachAsync(c =>
                 {
-                    Id = c.Id,
-                    InCirculationDate = ConverterTime.UtcConverter(c.InCirculationDate),
-                    LastMaintenace = ConverterTime.UtcConverter(c.LastMaintenace),
-                    Km = c.Km,
-                    NextMaintenace = ConverterTime.UtcConverter(c.NextMaintenace),
-                    Operational = c.Operational,
-                    PlateNbr = c.PlateNbr,
-                    Remarks = c.Remarks,
-                    TypeCar = (CarDTO.Types.TyepeOfCar)c.Type
+                    responseStream.WriteAsync(new CarDTO()
+                    {
+                        Id = c.Id,
+                        InCirculationDate = ConverterTime.UtcConverter(c.InCirculationDate),
+                        LastMaintenace = ConverterTime.UtcConverter(c.LastMaintenace),
+                        Km = c.Km,
+                        NextMaintenace = ConverterTime.UtcConverter(c.NextMaintenace),
+                        Operational = c.Operational,
+                        PlateNbr = c.PlateNbr,
+                        Remarks = c.Remarks,
+                        TypeCar = (CarDTO.Types.TyepeOfCar)c.Type
+                    });
                 });
-            });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.StackTrace);
+            }
+
         }
 
         public override async Task<Empty> AddCar(CarDTO request, ServerCallContext context)
@@ -113,32 +142,41 @@ namespace GrpcServiceCar.Services
             CarValidator validationRules = new CarValidator();
             if ((await validationRules.ValidateAsync(car)).IsValid)
             {
-                await using var transaction = await CarDbContext.Database.BeginTransactionAsync();
+                try
                 {
-                    try
+                    await using var transaction = await _carDbContext.Database.BeginTransactionAsync();
                     {
-                        var data = CarDbContext.Cars.FirstOrDefault(i => i.Id.Equals(request.Id));
-                        if (data != null)
+                        try
                         {
-                            CarDbContext.Cars.Update(data);
+                            var data = _carDbContext.Cars.FirstOrDefault(i => i.Id.Equals(request.Id));
+                            if (data != null)
+                            {
+                                _carDbContext.Cars.Update(data);
+
+                            }
+                            else
+                            {
+                                await _carDbContext.Cars.AddAsync(car);
+                            }
+
+                            await _carDbContext.SaveChangesAsync();
+                            await transaction.CommitAsync();
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.LogError(e.StackTrace);
+                            await transaction.RollbackAsync();
+                            throw new RpcException(new Status(StatusCode.Cancelled, e.Message));
 
                         }
-                        else
-                        {
-                            await CarDbContext.Cars.AddAsync(car);
-                        }
-
-                        await CarDbContext.SaveChangesAsync();
-                        await transaction.CommitAsync();
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError(e.StackTrace);
-                        await transaction.RollbackAsync();
-                        throw new RpcException(new Status(StatusCode.Cancelled, e.Message));
-
                     }
                 }
+                catch (Exception e)
+                {
+                    _logger.LogError(e.StackTrace);
+                }
+
+
             }
             else
             {
@@ -153,35 +191,36 @@ namespace GrpcServiceCar.Services
 
         public override async Task<CarDTO> addTimeSlot(TimeSlotCarId request, ServerCallContext context)
         {
-            await using var transaction = await CarDbContext.Database.BeginTransactionAsync();
+            await using var transaction = await _carDbContext.Database.BeginTransactionAsync();
             {
                 try
                 {
-                    var data = CarDbContext.Cars.FirstOrDefault(i => i.Id.Equals(request.IdCar));
-
+                    var data = _carDbContext.Cars.FirstOrDefaultAsync(i => i.Id.Equals(request.IdCar));
                     if (data != null)
                     {
-                        TimeSlot timeSlot = new TimeSlot() { EndSlot = request.Timeslot.EndSlot.ToDateTime(), StartSlot = request.Timeslot.StartSLot.ToDateTime(), Car = data };
-                        data.TimeSlots.Add(timeSlot);
-                        CarDbContext.Cars.Update(data);
-                        await CarDbContext.SaveChangesAsync();
+                        TimeSlot timeSlot = new TimeSlot() { EndSlot = request.Timeslot.EndSlot.ToDateTime(), StartSlot = request.Timeslot.StartSLot.ToDateTime(), Car = data.Result };
+                        data.Result.TimeSlots.Add(timeSlot);
+                        _carDbContext.Cars.Update(data.Result);
+                        await _carDbContext.SaveChangesAsync();
                         await transaction.CommitAsync();
+                        var ret = _carDbContext.Cars.Include(i => i.TimeSlots).FirstOrDefaultAsync(i => i.Id.Equals(request.IdCar)).Result;
+                        List<TimeSLotCar> timeSLotCars = new List<TimeSLotCar>();
+                        ret.TimeSlots.ForEach(t => timeSLotCars.Add(new TimeSLotCar() { StartSLot = ConverterTime.UtcConverter(t.StartSlot), EndSlot = ConverterTime.UtcConverter(t.EndSlot) }));
                         return new CarDTO()
                         {
-                            Id = data.Id,
-                            InCirculationDate = ConverterTime.UtcConverter(data.InCirculationDate),
-                            LastMaintenace = ConverterTime.UtcConverter(data.LastMaintenace),
-                            Km = data.Km,
-                            NextMaintenace = ConverterTime.UtcConverter(data.NextMaintenace),
-                            Operational = data.Operational,
-                            PlateNbr = data.PlateNbr,
-                            Remarks = data.Remarks,
-                            TypeCar = (CarDTO.Types.TyepeOfCar)data.Type
+                            Id = ret.Id,
+                            InCirculationDate = ConverterTime.UtcConverter(ret.InCirculationDate),
+                            LastMaintenace = ConverterTime.UtcConverter(ret.LastMaintenace),
+                            Km = ret.Km,
+                            NextMaintenace = ConverterTime.UtcConverter(ret.NextMaintenace),
+                            Operational = ret.Operational,
+                            PlateNbr = ret.PlateNbr,
+                            Remarks = ret.Remarks,
+                            TypeCar = (CarDTO.Types.TyepeOfCar)ret.Type,
+                            TimeSLots = { timeSLotCars }
                         };
                     }
-
                     return null;
-
                 }
                 catch (Exception e)
                 {
@@ -191,37 +230,41 @@ namespace GrpcServiceCar.Services
 
                 }
             }
-
-
 
         }
 
         public override async Task<CarDTO> addTimeSlotByName(TimeSlotCarName request, ServerCallContext context)
         {
-            await using var transaction = await CarDbContext.Database.BeginTransactionAsync();
+            await using var transaction = await _carDbContext.Database.BeginTransactionAsync();
             {
                 try
                 {
-                    var data = CarDbContext.Cars.FirstOrDefault(i => i.Id.Equals(request.IdName));
+                    var data = _carDbContext.Cars.FirstOrDefaultAsync(i => i.Id.Equals(request.IdName));
 
                     if (data != null)
                     {
-                        TimeSlot timeSlot = new TimeSlot() { EndSlot = request.Timeslot.EndSlot.ToDateTime(), StartSlot = request.Timeslot.StartSLot.ToDateTime(), Car = data };
-                        data.TimeSlots.Add(timeSlot);
-                        CarDbContext.Cars.Update(data);
-                        await CarDbContext.SaveChangesAsync();
+                        TimeSlot timeSlot = new TimeSlot() { EndSlot = request.Timeslot.EndSlot.ToDateTime(), StartSlot = request.Timeslot.StartSLot.ToDateTime(), Car = data.Result };
+                        data.Result.TimeSlots.Add(timeSlot);
+                        _carDbContext.Cars.Update(data.Result);
+                        await _carDbContext.SaveChangesAsync();
                         await transaction.CommitAsync();
+                        var ret = _carDbContext.Cars.Include(i => i.TimeSlots).FirstOrDefaultAsync(i => i.Id.Equals(request.IdName)).Result;
+                        List<TimeSLotCar> timeSLotCars = new List<TimeSLotCar>();
+                        ret.TimeSlots.ForEach(t => timeSLotCars.Add(new TimeSLotCar() { StartSLot = ConverterTime.UtcConverter(t.StartSlot), EndSlot = ConverterTime.UtcConverter(t.EndSlot) }));
                         return new CarDTO()
                         {
-                            Id = data.Id,
-                            InCirculationDate = ConverterTime.UtcConverter(data.InCirculationDate),
-                            LastMaintenace = ConverterTime.UtcConverter(data.LastMaintenace),
-                            Km = data.Km,
-                            NextMaintenace = ConverterTime.UtcConverter(data.NextMaintenace),
-                            Operational = data.Operational,
-                            PlateNbr = data.PlateNbr,
-                            Remarks = data.Remarks,
-                            TypeCar = (CarDTO.Types.TyepeOfCar)data.Type
+                            Id = ret.Id,
+                            InCirculationDate = ConverterTime.UtcConverter(ret.InCirculationDate),
+                            LastMaintenace = ConverterTime.UtcConverter(ret.LastMaintenace),
+                            Km = ret.Km,
+                            NextMaintenace = ConverterTime.UtcConverter(ret.NextMaintenace),
+                            Operational = ret.Operational,
+                            PlateNbr = ret.PlateNbr,
+                            Remarks = ret.Remarks,
+                            TypeCar = (CarDTO.Types.TyepeOfCar)ret.Type,
+
+                            TimeSLots = { timeSLotCars }
+
                         };
                     }
 
@@ -236,6 +279,7 @@ namespace GrpcServiceCar.Services
 
                 }
             }
+
 
         }
     }

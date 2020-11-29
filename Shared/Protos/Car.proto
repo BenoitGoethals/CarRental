@@ -25,12 +25,12 @@ message CarRequestID {
 
 message TimeSlotCarId {
 	int32 idCar = 1;
-	TimeSLot timeslot=2;
+	TimeSLotCar timeslot=2;
 }
 
 message TimeSlotCarName {
 	int32 idName = 1;
-	TimeSLot timeslot=2;
+	TimeSLotCar timeslot=2;
 }
 
 message CarRequestPlate {
@@ -54,15 +54,15 @@ message CarDTO {
 	}
 	TyepeOfCar typeCar = 8;
 	string remarks=9;
-	repeated TimeSLot TimeSLots=10;
+	repeated TimeSLotCar TimeSLots=10;
 }
 
-message TimeSLot {
+message TimeSLotCar {
 	int32 Id=1;
 	google.protobuf.Timestamp StartSLot=2;
 	google.protobuf.Timestamp EndSlot=3;
 }
 
 message TimeSLotCollection {
-	repeated TimeSLot TimeSLots=1;
+	repeated TimeSLotCar TimeSLots=1;
 }

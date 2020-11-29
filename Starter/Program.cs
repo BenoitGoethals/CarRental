@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
@@ -85,11 +86,12 @@ namespace Starter
             var response4 = await clcar.addTimeSlotAsync(new TimeSlotCarId()
             {
                 IdCar = response3.Id,
-                Timeslot = new TimeSLot()
+                Timeslot = new TimeSLotCar()
                     {StartSLot = ConverterTime.UtcConverter(DateTime.Now), EndSlot = ConverterTime.UtcConverter(DateTime.Now.AddDays(1))}
             });
 
-            Console.WriteLine("By PlateNbr: " + response4);
+            Console.WriteLine("response 4");
+            response4.TimeSLots.ToList().ForEach(action: t => { Console.WriteLine(value: t.Id); });
 
 
             Console.ReadLine();

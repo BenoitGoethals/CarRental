@@ -16,6 +16,7 @@ namespace GrpcServiceCar.data
         public CarDbContext(IConfiguration config, DbContextOptions<CarDbContext> options) : base(options)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
+            
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
