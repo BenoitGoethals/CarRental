@@ -7,24 +7,24 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Shared.model;
 
-namespace GrpcServiceCar.data
+namespace GrpcServiceReservations.data
 {
-    public class CarDbContext : DbContext
+    public class ReservationDbContext : DbContext
     {
         private readonly IConfiguration _config;
-        public DbSet<Car> Cars { get; set; }
-        
+        public DbSet<TimeSlot> TimeSlots { get; set; }
 
-     
-        public CarDbContext(IConfiguration config, DbContextOptions<CarDbContext> options) : base(options)
+
+
+        public ReservationDbContext(IConfiguration config, DbContextOptions<ReservationDbContext> options) : base(options)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
-            
+
         }
 
-        public CarDbContext( DbContextOptions<CarDbContext> options) : base(options)
+        public ReservationDbContext(DbContextOptions<ReservationDbContext> options) : base(options)
         {
-            
+
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

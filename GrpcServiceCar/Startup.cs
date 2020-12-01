@@ -27,6 +27,7 @@ namespace GrpcServiceCar
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<RepositoryCar>();
             services.AddDbContext<CarDbContext>(options =>
             {
                 options.UseSqlServer(Configuration["ConnectionString"]);
@@ -38,6 +39,7 @@ namespace GrpcServiceCar
                 builder.AddConsole();
 
             });
+           
             services.AddGrpc();
         }
 

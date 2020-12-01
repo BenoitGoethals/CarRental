@@ -8,6 +8,6 @@ namespace Shared.model
         public DateTime StartSlot { get; set; }
         public DateTime EndSlot { get; set; }
         public int CarId { get; set; }
-        public Car Car { get; set; }
+        
     }
 }

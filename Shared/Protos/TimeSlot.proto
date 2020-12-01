@@ -1,0 +1,55 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "GrpcServiceReservations.Protos";
+
+package TimeSlots;
+service TimeSlots {
+	
+	rpc GetCarTimeSLotsById (CarRequestID) returns (TimeSLotCollection);
+	
+	rpc AddTimeSlot(TimeSlotCarId) returns(StatusCrud);
+
+	rpc DeleteTimesloteCar(TimeSlotCarId) returns (TimeSlotDelete);
+	}
+
+message CarRequestID {
+	int32 id = 1;
+}
+
+message TimeSlotDelete{
+	bool deleted=1;
+}
+
+message StatusCrud{
+	bool added=1;
+}
+
+
+message TimeSlotCarId {
+	int32 idCar = 1;
+	TimeSLotCar timeslot=2;
+}
+
+message TimeSlotCarName {
+	int32 idName = 1;
+	TimeSLotCar timeslot=2;
+}
+
+message CarRequestPlate {
+	string name = 1;
+}
+
+
+
+message TimeSLotCar {
+	int32 Id=1;
+	google.protobuf.Timestamp StartSLot=2;
+	google.protobuf.Timestamp EndSlot=3;
+}
+
+message TimeSLotCollection {
+	repeated TimeSLotCar TimeSLots=1;
+}

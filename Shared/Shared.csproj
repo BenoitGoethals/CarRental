@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <None Remove="Protos\Car.proto" />
+    <None Remove="Protos\TimeSlot.proto" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +24,7 @@
       <GrpcServices>Both</GrpcServices>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Protobuf>
+    <Protobuf Include="Protos\TimeSlot.proto" />
   </ItemGroup>
 
 </Project>

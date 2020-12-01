@@ -26,7 +26,7 @@ namespace Shared.model
 
         public string Remarks { get; set; }
 
-        public List<TimeSlot> TimeSlots =new List<TimeSlot>();
+   //     public List<TimeSlot> TimeSlots =new List<TimeSlot>();
       
     }
 

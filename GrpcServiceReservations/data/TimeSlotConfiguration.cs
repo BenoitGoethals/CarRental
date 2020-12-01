@@ -8,7 +8,7 @@ using Shared.model;
 
 namespace GrpcServiceCar.data
 {
-    public class TimrSlotConfiguration : IEntityTypeConfiguration<TimeSlot>
+    public class TimeSlotConfiguration : IEntityTypeConfiguration<TimeSlot>
     {
         public void Configure(EntityTypeBuilder<TimeSlot> builder)
         {
@@ -18,9 +18,10 @@ namespace GrpcServiceCar.data
             builder.Property(s => s.StartSlot).HasColumnName(nameof(TimeSlot.StartSlot)).IsRequired();
             builder.Property(s => s.EndSlot).HasColumnName(nameof(TimeSlot.EndSlot)).IsRequired();
 
-            builder.HasOne<Car>(s => s.Car)
-                .WithMany(g => g.TimeSlots)
-                .HasForeignKey(s => s.CarId).OnDelete(DeleteBehavior.Cascade);
+         //   builder.HasOne<Car>(s => s.Car)
+          //      .WithMany(g => g.TimeSlots)
+      //          .HasForeignKey(s => s.CarId)
+   //       .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
